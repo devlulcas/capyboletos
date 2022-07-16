@@ -2,9 +2,17 @@
   "name": "capyboletos",
   "version": "1.0.0",
   "license": "MIT",
+  "type": "module",
   "author": "devlulcas",
   "description": "Uma biblioteca JS/TS para validação de boletos. Essa biblioteca é uma reescrita de uma outra biblioteca de validação de boletos a @mrmgomes/boleto-utils.",
-  "keywords": ["boleto", "bancario", "bancos", "validacao", "validacao-boleto", "boleto-utils"],
+  "keywords": [
+    "boleto",
+    "bancario",
+    "bancos",
+    "validacao",
+    "validacao-boleto",
+    "boleto-utils"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
