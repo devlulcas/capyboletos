@@ -103,13 +103,13 @@ export const identifyReference = (code) => {
  * -------------
  *
  * @param {string} codigo Numeração do boleto
- * @param {string} tipoCodigo tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
+ * @param {string} codeType tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
  *
  * -------------
  *
  * @return {Date} dataBoleto
  */
-export const identificarData = (codigo, tipoCodigo) => {
+export const identificarData = (codigo, codeType) => {
   const cleanedUpCode = code.replace(/[^0-9]/g, "");
 
   const tipoBoleto = boletoTypeIdentifier(cleanedUpCode);
@@ -118,13 +118,13 @@ export const identificarData = (codigo, tipoCodigo) => {
   const initialDate = moment("1997-10-07 20:54:59.000Z");
   const dataBoleto = initialDate.tz("UTC");
 
-  if (tipoCodigo === "CÓDIGO_DE_BARRAS") {
+  if (codeType === "CÓDIGO_DE_BARRAS") {
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
       fatorData = cleanedUpCode.substr(5, 4);
     } else {
       fatorData = "0";
     }
-  } else if (tipoCodigo === "LINHA_DIGITÁVEL") {
+  } else if (codeType === "LINHA_DIGITÁVEL") {
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
       fatorData = cleanedUpCode.substr(33, 4);
     } else {
@@ -143,28 +143,28 @@ export const identificarData = (codigo, tipoCodigo) => {
  * -------------
  *
  * @param {string} codigo Numeração do boleto
- * @param {string} tipoCodigo tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
+ * @param {string} codeType tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
  *
  * -------------
  *
  * @return {string} valorFinal
  */
-export const identificarValorCodBarrasArrecadacao = (codigo, tipoCodigo) => {
-  codigo = codigo.replace(/[^0-9]/g, "");
-  const isValorEfetivo = identifyReference(codigo).efetivo;
+export function identifyBarcodeCollectionValue(code, codeType) {
+  code = code.replace(/[^0-9]/g, "");
+  const isValorEfetivo = identifyReference(code).efetivo;
 
   let valorBoleto = "";
   let valorFinal;
 
   if (isValorEfetivo) {
-    if (tipoCodigo == "LINHA_DIGITÁVEL") {
-      valorBoleto = codigo.substr(4, 14);
-      valorBoleto = codigo.split("");
+    if (codeType == "LINHA_DIGITÁVEL") {
+      valorBoleto = code.substr(4, 14);
+      valorBoleto = code.split("");
       valorBoleto.splice(11, 1);
       valorBoleto = valorBoleto.join("");
       valorBoleto = valorBoleto.substr(4, 11);
-    } else if (tipoCodigo == "CÓDIGO_DE_BARRAS") {
-      valorBoleto = codigo.substr(4, 11);
+    } else if (codeType == "CÓDIGO_DE_BARRAS") {
+      valorBoleto = code.substr(4, 11);
     }
 
     valorFinal = `${valorBoleto.substr(0, 9)}.${valorBoleto.substr(9, 2)}`;
@@ -181,25 +181,26 @@ export const identificarValorCodBarrasArrecadacao = (codigo, tipoCodigo) => {
   return valorFinal;
 };
 
+// !
 /**
  * Identifica o valor no boleto inserido
  *
  * -------------
  *
  * @param {string} codigo Numeração do boleto
- * @param {string} tipoCodigo tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
+ * @param {string} codeType tipo de código inserido (CÓDIGO_DE_BARRAS / LINHA_DIGITÁVEL)
  *
  * -------------
  *
  * @return {float} valorFinal
  */
-export const identificarValor = (codigo, tipoCodigo) => {
+export const identifyValue = (codigo, codeType) => {
   const tipoBoleto = boletoTypeIdentifier(codigo);
 
   let valorBoleto = "";
   let valorFinal;
 
-  if (tipoCodigo == "CÓDIGO_DE_BARRAS") {
+  if (codeType == "CÓDIGO_DE_BARRAS") {
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
       valorBoleto = codigo.substr(9, 10);
       valorFinal = `${valorBoleto.substr(0, 8)}.${valorBoleto.substr(8, 2)}`;
@@ -210,12 +211,12 @@ export const identificarValor = (codigo, tipoCodigo) => {
         char = valorFinal.substr(1, 1);
       }
     } else {
-      valorFinal = identificarValorCodBarrasArrecadacao(
+      valorFinal = identifyBarcodeCollectionValue(
         codigo,
         "CÓDIGO_DE_BARRAS"
       );
     }
-  } else if (tipoCodigo == "LINHA_DIGITÁVEL") {
+  } else if (codeType == "LINHA_DIGITÁVEL") {
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
       valorBoleto = codigo.substr(37);
       valorFinal = `${valorBoleto.substr(0, 8)}.${valorBoleto.substr(8, 2)}`;
@@ -226,7 +227,7 @@ export const identificarValor = (codigo, tipoCodigo) => {
         char = valorFinal.substr(1, 1);
       }
     } else {
-      valorFinal = identificarValorCodBarrasArrecadacao(
+      valorFinal = identifyBarcodeCollectionValue(
         codigo,
         "LINHA_DIGITÁVEL"
       );
@@ -413,13 +414,13 @@ export const calculaDVCodBarras = (codigo, posicaoCodigo, mod) => {
  *
  * @return {boolean} true = boleto válido / false = boleto inválido
  */
-export const validarCodigoComDV = (codigo, tipoCodigo) => {
+export const validarCodigoComDV = (codigo, codeType) => {
   codigo = codigo.replace(/[^0-9]/g, "");
   let tipoBoleto;
 
   let resultado;
 
-  if (tipoCodigo === "LINHA_DIGITÁVEL") {
+  if (codeType === "LINHA_DIGITÁVEL") {
     tipoBoleto = boletoTypeIdentifier(codigo, "LINHA_DIGITÁVEL");
 
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
@@ -474,7 +475,7 @@ export const validarCodigoComDV = (codigo, tipoCodigo) => {
 
       resultado = bloco1 + bloco2 + bloco3 + bloco4;
     }
-  } else if (tipoCodigo === "CÓDIGO_DE_BARRAS") {
+  } else if (codeType === "CÓDIGO_DE_BARRAS") {
     tipoBoleto = boletoTypeIdentifier(codigo);
 
     if (tipoBoleto == "BANCO" || tipoBoleto == "CARTÃO_DE_CRÉDITO") {
@@ -528,7 +529,7 @@ export const geraCodBarras = (codigo) => {
 };
 
 export const validarBoleto = (codigo) => {
-  const tipoCodigo = codeTypeIdentifier(codigo);
+  const codeType = codeTypeIdentifier(codigo);
 
   const retorno = {};
   codigo = codigo.replace(/[^0-9]/g, "");
@@ -561,7 +562,7 @@ export const validarBoleto = (codigo) => {
     retorno.codigoInput = codigo;
     retorno.mensagem =
       "Este tipo de boleto deve possuir um código de barras 44 caracteres numéricos. Ou linha digitável de 48 caracteres numéricos.";
-  } else if (!validarCodigoComDV(codigo, tipoCodigo)) {
+  } else if (!validarCodigoComDV(codigo, codeType)) {
     retorno.sucesso = false;
     retorno.codigoInput = codigo;
     retorno.mensagem =
@@ -571,22 +572,22 @@ export const validarBoleto = (codigo) => {
     retorno.codigoInput = codigo;
     retorno.mensagem = "Boleto válido";
 
-    switch (tipoCodigo) {
+    switch (codeType) {
       case "LINHA_DIGITÁVEL":
-        retorno.tipoCodigoInput = "LINHA_DIGITÁVEL";
+        retorno.codeTypeInput = "LINHA_DIGITÁVEL";
         retorno.tipoBoleto = boletoTypeIdentifier(codigo, "LINHA_DIGITÁVEL");
         retorno.codigoBarras = linhaDigitavel2CodBarras(codigo);
         retorno.linhaDigitavel = codigo;
         retorno.vencimento = identificarData(codigo, "LINHA_DIGITÁVEL");
-        retorno.valor = identificarValor(codigo, "LINHA_DIGITÁVEL");
+        retorno.valor = identifyValue(codigo, "LINHA_DIGITÁVEL");
         break;
       case "CÓDIGO_DE_BARRAS":
-        retorno.tipoCodigoInput = "CÓDIGO_DE_BARRAS";
+        retorno.codeTypeInput = "CÓDIGO_DE_BARRAS";
         retorno.tipoBoleto = boletoTypeIdentifier(codigo, "CÓDIGO_DE_BARRAS");
         retorno.codigoBarras = codigo;
         retorno.linhaDigitavel = codBarras2LinhaDigitavel(codigo, false);
         retorno.vencimento = identificarData(codigo, "CÓDIGO_DE_BARRAS");
-        retorno.valor = identificarValor(codigo, "CÓDIGO_DE_BARRAS");
+        retorno.valor = identifyValue(codigo, "CÓDIGO_DE_BARRAS");
         break;
       default:
         break;

@@ -1,27 +1,37 @@
+function substr(str: string, from: number, length?: number) {
+  return str.substr(from, length);
+}
+
+
+
 /**
  * Função auxiliar para remover os zeros à esquerda dos valores detectados no código inserido
  */
-function substringReplace(
-  str: string,
-  replacement: string,
-  start: number,
-  size: number
-) {
-  // Impede que start seja negativo
-  const positiveStart = start < 0 ? start + str.length : start;
+function substringReplace(str: any, replacement: any, start: any, size: any) {
+  if (start < 0) {
+    start += str.length;
+  }
 
-  // Quando size não é passado, substitui todo o resto da string
   size = size !== undefined ? size : str.length;
   
-  // Impede que size seja negativo
-  size = size < 0 ? size + str.length - positiveStart : size;
+  if (size < 0) {
+    size = size + str.length - start;
+  }
 
-  const startString = str.slice(0, positiveStart);
-  const replacementStart = replacement.substring(0, size);
-  const replacementString = replacementStart + replacement.slice(size);
-  const endString = str.slice(positiveStart + size);
+  const originalStringHead = str.slice(0, start)
+  const replacementStringHead = substr(replacement, 0, size)
+  const replacementStringBody =  replacement.slice(size)
+  const originalStringBody = str.slice(start + size)
   
-  return `${startString}${replacementString}${endString}`;
+  return `${originalStringHead}${replacementStringHead}${replacementStringBody}${originalStringBody}`
 }
 
-export { substringReplace };
+/**
+ * Remove todos os caracteres não numéricos
+ */
+function leaveOnlyNumbers(str: string) {
+  return str.replace(/[^0-9]/g, "");
+}
+
+export { substr, substringReplace, leaveOnlyNumbers };
+

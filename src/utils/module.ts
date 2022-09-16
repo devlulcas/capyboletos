@@ -7,7 +7,7 @@
  * [Utilizando Módulo 10 para calcular dígito verificador 10](http://blog.marvinsiq.com/2008/09/30/utilizando-modulo-10-para-calcular-digito-verificador/#:~:text=O%20c%C3%A1lculo%20do%20M%C3%B3dulo%2010,depois%201%20e%20assim%20sucessivamente.)
  */
 
-import { NumericString } from "../types/NumericString";
+import { NumericString } from "../types/numeric-string";
 
 /**
  * Calcula o dígito verificador de uma numeração a partir do módulo 10.

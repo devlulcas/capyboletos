@@ -1,1 +1,1 @@
-export { sum } from "./capyboleto";
+export * from "./capyboleto";
