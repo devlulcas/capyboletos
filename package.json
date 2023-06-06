@@ -1,31 +1,23 @@
 {
-  "name": "capyboletos",
-  "version": "1.0.0",
-  "license": "MIT",
+  "name": "@devlulcas/capyboletos",
   "type": "module",
-  "author": "devlulcas",
-  "description": "Uma biblioteca JS/TS para validação de boletos. Essa biblioteca é uma reescrita de uma outra biblioteca de validação de boletos a @mrmgomes/boleto-utils.",
-  "keywords": [
-    "boleto",
-    "bancario",
-    "bancos",
-    "validacao",
-    "validacao-boleto",
-    "boleto-utils"
-  ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
+  "private": true,
   "scripts": {
-    "test": "vitest",
-    "test:watch": "vitest watch",
-    "coverage": "vitest run --coverage"
+    "build": "turbo build --filter @devlulcas/capyboletos*",
+    "dev": "turbo dev --filter @devlulcas/capyboletos*",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint -- --fix",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
-    "typescript": "^4.7.4",
-    "vite": "^3.0.0",
-    "vitest": "^0.18.0"
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8",
+    "turbo": "^1.10.1",
+    "typescript": "^5.1.3",
+    "vitest": "^0.32.0"
   }
 }

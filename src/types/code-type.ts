@@ -1,1 +1,0 @@
-export type CodeType = "CÓDIGO_DE_BARRAS" | "LINHA_DIGITÁVEL" | "TAMANHO_INCORRETO"

@@ -1,0 +1,49 @@
+{
+  "name": "@devlulcas/capyboletos",
+  "version": "0.0.0",
+  "keywords": [
+    "boleto",
+    "bancario",
+    "bancos",
+    "brasil",
+    "brazil",
+    "bank",
+    "banking",
+    "barcode"
+  ],
+  "author": "Lucas Alves Rego",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devlulcas/capyboletos",
+    "directory": "packages/core"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}

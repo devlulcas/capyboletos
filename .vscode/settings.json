@@ -1,8 +1,9 @@
 {
-  "cSpell.words": [
-    "capyboleto",
-    "capyboletos",
-    "devlulcas",
-    "mrmgomes"
-  ]
+  "cSpell.words": ["capyboletos", "devlulcas"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true
 }
